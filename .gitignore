@@ -2,9 +2,9 @@
 *.o.debug
 *~
 \#*\#
-roborumble
-roborumble-debug
-roborumble-ace
-Roborumble.app
+roboticslite
+roboticslite-ace
+roboticslite-debug
+RoboticsLite.app
 SDL2
 .DS_Store
