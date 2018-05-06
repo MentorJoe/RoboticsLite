@@ -1,0 +1,12 @@
+Package: roboticslite
+Version: 0.2
+Maintainer: Radio Joe <j@pelirrojo.ninja>
+Description: Local Multiplayer Arcade Game
+ .
+Section: games
+Priority: extra
+Architecture: amd64
+Homepage: http://pelirrojo.ninja/roboticslite
+Depends: libsdl2-2.0-0, libsdl2-image-2.0-0, libsdl2-ttf-2.0-0
+
+

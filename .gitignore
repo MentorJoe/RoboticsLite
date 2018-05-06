@@ -1,0 +1,10 @@
+*.o
+*.o.debug
+*~
+\#*\#
+roborumble
+roborumble-debug
+roborumble-ace
+Roborumble.app
+SDL2
+.DS_Store

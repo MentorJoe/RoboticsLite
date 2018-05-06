@@ -1,0 +1,66 @@
+# -*- Makefile -*-
+CC=g++
+FRAMEWORKS_DIRECTORY=../Frameworks
+CFLAGS=-Wall -g -c -std=c++11 -I. -DRR_OSX=1
+SOURCES=rr-main.cpp rr-input.cpp rr-entity.cpp rr-level.cpp rr-level-powerup.cpp rr-level-steamworks.cpp rr-level-stronghold.cpp rr-team.cpp rr-hud.cpp rr-menu.cpp rr-player.cpp rr-ttf.cpp rr-renderable.cpp rr-hscorefile.cpp rr-slideshowpane.cpp rl-confdir.cpp
+LDFLAGS=-F$(FRAMEWORKS_DIRECTORY) -framework SDL2 -framework SDL2_ttf -framework SDL2_image -rpath @executable_path/../Frameworks
+# An explanattion of the Linker Flags
+# -F$(FRAMEWORKS_DIRECTORY), because Apple think's it's cute to not include the system default framework path
+# -framework SDL2 ... basically equals -lSDL2
+# -rpath @executable_path/../Frameworks, which tells the linker to search within the .app, which I don't know why it wouldn't be a thing by default.
+OUTFILE=roboticslite
+
+OBJECTS=$(SOURCES:.cpp=.o)
+OBJECTS_DEBUG=$(SOURCES:.cpp=.debug.o)
+OBJECTS_ACE=$(SOURCES:.cpp=.ace.o)
+
+.PHONY: clean_package package
+
+build: $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $(OUTFILE)
+
+debug: $(OBJECTS_DEBUG)
+	$(CC) $(OBJECTS_DEBUG) $(LDFLAGS) -o $(OUTFILE)-debug
+
+ace: $(OBJECTS_ACE)
+	$(CC) $(OBJECTS_ACE) $(LDFLAGS) -o $(OUTFILE)-ace
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $< -o $@
+
+%.debug.o: %.cpp
+	$(CC) -DDEBUG $(CFLAGS) $< -o $@
+
+%.ace.o: %.cpp
+	$(CC) -DRR_ACE $(CFLAGS) $< -o $@
+
+package_ace: ace
+	mkdir -p RoboticsLiteACE.app/Contents/{MacOS,Resources,Frameworks}
+	mkdir -p RoboticsLiteACE.app/Contents/Resources/{imgs,ttf}
+	cp -R "$(FRAMEWORKS_DIRECTORY)/SDL2.framework" "./RoboticsLiteACE.app/Contents/Frameworks/"
+	cp -R "$(FRAMEWORKS_DIRECTORY)/SDL2_ttf.framework" "./RoboticsLiteACE.app/Contents/Frameworks/"
+	cp -R "$(FRAMEWORKS_DIRECTORY)/SDL2_image.framework" "./RoboticsLiteACE.app/Contents/Frameworks/"
+	cp imgs/*.png "./RoboticsLiteACE.app/Contents/Resources/imgs/"
+	cp ttf/*.ttf "./RoboticsLiteACE.app/Contents/Resources/ttf/"
+	cp $(OUTFILE)-ace "./RoboticsLiteACE.app/Contents/MacOS"
+	cp etc/Info.plist "./RoboticsLiteACE.app/Contents/"
+	cp imgs/roboticslite.icns "./RoboticsLite.app/Contents/Resources/"
+
+package: build
+	mkdir -p RoboticsLite.app/Contents/{MacOS,Resources,Frameworks}
+	mkdir -p RoboticsLite.app/Contents/Resources/{imgs,ttf}
+	cp -R "$(FRAMEWORKS_DIRECTORY)/SDL2.framework" "./RoboticsLite.app/Contents/Frameworks/"
+	cp -R "$(FRAMEWORKS_DIRECTORY)/SDL2_ttf.framework" "./RoboticsLite.app/Contents/Frameworks/"
+	cp -R "$(FRAMEWORKS_DIRECTORY)/SDL2_image.framework" "./RoboticsLite.app/Contents/Frameworks/"
+	cp imgs/*.png "./RoboticsLite.app/Contents/Resources/imgs/"
+	cp ttf/*.ttf "./RoboticsLite.app/Contents/Resources/ttf/"
+	cp $(OUTFILE) "./RoboticsLite.app/Contents/MacOS"
+	cp etc/Info.plist "./RoboticsLite.app/Contents/"
+	cp imgs/roboticslite.icns "./RoboticsLite.app/Contents/Resources/"
+
+clean_package: clean
+	rm -rf RoboticsLite.app
+	rm -f roboticslite
+
+clean:
+	rm -f *.o

@@ -1,0 +1,19 @@
+Seven Segment (7seg.ttf)
+
+Used for the score displays and other numerical things. I created it, and
+feel free to use it for whatever you may.
+
+
+
+DejaVu Sans Mono (djvm.ttf) <https://dejavu-fonts.github.io/>
+
+Used for titles and other various large texts.
+
+
+
+ProFont (profont.ttf) <http://tobiasjung.name/profont/>
+	(page was down when I went to look for it, but huzzah for the
+	Internet Archive Wayback Machine)
+
+Used for the debug console.
+
